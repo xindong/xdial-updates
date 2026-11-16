@@ -61,14 +61,21 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
+      # Feed state lives on the feed branch; main carries only the publisher's
+      # code and changes through pull requests (the organization requires that
+      # on default branches). Each run brings feed up to date with main first.
       - name: Check out the latest publisher state
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          ref: main
-          fetch-depth: 1
+          ref: feed
+          fetch-depth: 0
 
-      - name: Fast-forward to the latest main
-        run: git pull --ff-only origin main
+      - name: Bring the publisher code up to date with main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --ff-only origin feed
+          git merge --no-edit origin/main
 
       - name: Require the state of both channels
         # The build gate compares against both channels' history; refuse to run
@@ -117,11 +124,9 @@ jobs:
           if git diff --cached --quiet; then
             echo "Generated state is already committed."
           else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "$subject"
-            git push origin HEAD:main
           fi
+          git push origin HEAD:feed
 
       - name: Report other channel changes in this deployment
         # Warning only. The whole site/ is uploaded, so the other channel's

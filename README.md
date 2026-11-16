@@ -10,7 +10,7 @@ Release 和 ZIP 仍在 [`xindong/XDial`](https://github.com/xindong/XDial)。客
 
 ## 初次设置
 
-在仓库 Settings → Pages 中把 Source 设为 **GitHub Actions**。工作流只使用本仓库的
+在仓库 Settings → Pages 中把 Source 设为 **GitHub Actions**。发布器把生成的清单、ledger、history 和 audit 提交到 `feed` 分支；`main` 只放发布器代码，按组织规则经 PR 修改。每次运行先把 `main` 合进 `feed`，再生成并部署。工作流只使用本仓库的
 `GITHUB_TOKEN`：读取公开的 XDial Release，提交生成的元数据，并部署 Pages。无需跨仓库
 PAT。初始 `release: null` 是未部署的安全占位；第一次应直接发布已验证的正式版本。
 
