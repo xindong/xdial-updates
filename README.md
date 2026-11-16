@@ -10,7 +10,7 @@ Release 和 ZIP 仍在 [`xindong/XDial`](https://github.com/xindong/XDial)。客
 
 ## 初次设置
 
-在仓库 Settings → Pages 中把 Source 设为 **GitHub Actions**。工作流只使用本仓库的
+在仓库 Settings → Pages 中把 Source 设为 **GitHub Actions**。发布器把生成的清单、ledger、history 和 audit 提交到 `feed` 分支；`main` 只放发布器代码，按组织规则经 PR 修改。每次运行先把 `main` 合进 `feed`，再生成并部署。工作流只使用本仓库的
 `GITHUB_TOKEN`：读取公开的 XDial Release，提交生成的元数据，并部署 Pages。无需跨仓库
 PAT。初始 `release: null` 是未部署的安全占位；第一次应直接发布已验证的正式版本。
 
@@ -78,8 +78,8 @@ GitHub 对同一个并发组最多保留一个运行中和一个排队中的运�
 取消，没有执行。所以派发下一个之前，先等上一个结束（例如 `gh run watch --exit-status`）；被取消的
 运行需要重新派发。stable 热修复要同批发 beta.N+1 时也是如此，逐个派发。
 
-**部署失败时 main 上的状态已经是最终状态。** feed、ledger 和 history 在部署之前就已经提交并推送到
-main。部署失败后，这份状态会跟着**任一通道**的下一次运行一起上线，因为每次运行都上传整个
+**部署失败时 `feed` 分支上的状态已经是最终状态。** feed、ledger 和 history 在部署之前就已经提交并推送到
+`feed` 分支。部署失败后，这份状态会跟着**任一通道**的下一次运行一起上线，因为每次运行都上传整个
 `site/`。例如 beta 发布推送成功、部署失败，之后发 stable 时会把这份 beta 一起部署出去，部署后的
 `beta.json` 校验也会通过。所以部署失败后，在运行另一个通道之前，必须先处理失败的那个通道：
 用相同命令重跑（会是 noop 加部署），或者对该通道执行 withdraw / restore 把 feed 改成想要的内容。
@@ -142,7 +142,7 @@ clone。不要在要提交的工作区里跑，避免把演练生成的 revision
 
 ```sh
 drill="$(mktemp -d)"
-git clone --depth 1 https://github.com/xindong/xdial-updates.git "$drill"
+git clone --depth 1 --branch feed https://github.com/xindong/xdial-updates.git "$drill"
 
 # publish 会读取公开 Release、下载并验证真实资产（stable 包约 56 MB）。
 # tag 必须高于该通道 ledger 的 highestPublishedVersion，且源 Release 已公开；
