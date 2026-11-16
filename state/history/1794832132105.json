@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "revision": 1794832132105,
+  "channel": "stable",
+  "generatedAt": "2026-11-16T12:28:52Z",
+  "release": {
+    "tag": "v0.9.8",
+    "version": "0.9.8",
+    "build": "1794829568",
+    "minimumSystemVersion": "15.0",
+    "publishedAt": "2026-11-16T12:28:37Z",
+    "releaseNotes": "- XDial 改由 XD Entertainment 签名和公证，之后的版本都从公司的更新地址自动更新。\n- 这一版换了新的应用身份，不会自动替换之前装的 XDial。已经装过的话，先在旧版里退出并卸载（不要勾选删除数据），再安装这一版，原来的配置会保留。",
+    "archiveURL": "https://github.com/xindong/XDial/releases/download/v0.9.8/XDial-v0.9.8.zip",
+    "archiveSize": 56387430,
+    "archiveSHA256": "28d0e554bd7cd6f07bd30d09c42a445d02df40a067b965c08025282e5758260e"
+  }
+}
